@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { FileDocument, File } from './file.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { CreateFileInput } from './inputs/create.input';
+import { UpdateFileInput } from './inputs/update.input';
 
 @Injectable()
 export class FilesService {
@@ -10,7 +12,7 @@ export class FilesService {
     private readonly fileModel: Model<FileDocument>,
   ) {}
 
-  async createOne(data: File): Promise<File> {
+  async createOne(data: CreateFileInput): Promise<File> {
     const file = new this.fileModel(data);
     const res = file.save();
     return res as unknown as File;
@@ -29,7 +31,10 @@ export class FilesService {
     return res as unknown as File[];
   }
 
-  async updateOne(_id: string, data: Partial<File>): Promise<File> {
+  async updateOne(
+    _id: string,
+    data: Omit<UpdateFileInput, '_id'>,
+  ): Promise<File> {
     return this.fileModel.findByIdAndUpdate(
       { id: _id },
       { ...data },
