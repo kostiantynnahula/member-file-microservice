@@ -1,11 +1,8 @@
 import { IsDefined } from 'class-validator';
 
-export class GetManyFolderInput {
+export class DeleteOneFolderInput {
   @IsDefined()
-  page: number;
-
-  @IsDefined()
-  limit: number;
+  _id: string;
 
   @IsDefined()
   user_id: string;

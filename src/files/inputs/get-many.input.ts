@@ -1,9 +1,12 @@
-import { IsOptional } from 'class-validator';
+import { IsDefined } from 'class-validator';
 
 export class GetManyFilesInput {
-  @IsOptional()
-  page?: number;
+  @IsDefined()
+  page: number;
 
-  @IsOptional()
-  limit?: number;
+  @IsDefined()
+  limit: number;
+
+  @IsDefined()
+  user_id: string;
 }
