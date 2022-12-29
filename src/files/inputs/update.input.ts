@@ -12,5 +12,8 @@ export class UpdateFileInput {
 
   @IsOptional()
   @IsNotEmpty()
-  folder?: Folder;
+  folder_id?: Folder;
+
+  @IsDefined()
+  user_id: string;
 }

@@ -8,5 +8,9 @@ export class CreateFileInput {
 
   @IsOptional()
   @IsNotEmpty()
-  folder?: Folder;
+  folder_id?: Folder;
+
+  @IsDefined()
+  @IsNotEmpty()
+  user_id: string;
 }

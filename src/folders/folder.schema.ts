@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import { File } from './../files/file.schema';
 
 @Schema({
@@ -18,6 +18,18 @@ export class Folder {
 
   @Prop()
   files: File[];
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Folder.name,
+    required: false,
+  })
+  parent_id: string;
+
+  @Prop({
+    required: true,
+  })
+  user_id: string;
 }
 
 export type FolderDocument = HydratedDocument<SchemaFactory>;

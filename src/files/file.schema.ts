@@ -26,7 +26,12 @@ export class File {
     ref: Folder.name,
     required: false,
   })
-  folder?: string;
+  folder_id?: string;
+
+  @Prop({
+    required: true,
+  })
+  user_id: string;
 }
 
 export type FileDocument = HydratedDocument<SchemaFactory>;
