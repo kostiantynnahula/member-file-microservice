@@ -50,6 +50,7 @@ export class FoldersController {
     cmd: 'delete-one',
   })
   async deleteOne(@Payload() payload: DeleteOneFolderInput) {
-    return await this.foldersService.deleteOne(payload);
+    await this.foldersService.deleteOne(payload);
+    return true;
   }
 }

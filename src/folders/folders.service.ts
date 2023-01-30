@@ -50,6 +50,6 @@ export class FoldersService {
 
   async deleteOne(params: DeleteOneFolderInput): Promise<void> {
     const { _id, user_id } = params;
-    this.folderModel.findByIdAndDelete({ id: _id, user_id: user_id });
+    await this.folderModel.findByIdAndDelete({ _id: _id, user_id: user_id });
   }
 }
