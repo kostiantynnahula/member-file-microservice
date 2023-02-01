@@ -42,10 +42,10 @@ export class FoldersService {
     user_id: string,
     data: Omit<UpdateFolderInput, '_id' | 'user_id'>,
   ): Promise<Folder> {
-    return this.folderModel.findByIdAndUpdate(
-      { id: _id, user_id: user_id },
+    return (await this.folderModel.findByIdAndUpdate(
+      { _id: _id, user_id: user_id },
       { ...data },
-    ) as unknown as Folder;
+    )) as unknown as Folder;
   }
 
   async deleteOne(params: DeleteOneFolderInput): Promise<void> {
