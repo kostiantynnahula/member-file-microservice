@@ -27,9 +27,9 @@ export class FoldersService {
   }
 
   async getMany(params: GetManyFolderInput): Promise<Folder[]> {
-    const { page, limit, user_id } = params;
+    const { page = 1, limit = 100, user_id, parent_id } = params;
     const res = this.folderModel
-      .find({ user_id: user_id })
+      .find({ user_id: user_id, parent_id: parent_id })
       .limit(limit)
       .skip((page - 1) * limit)
       .exec();

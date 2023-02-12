@@ -1,12 +1,15 @@
-import { IsDefined } from 'class-validator';
+import { IsDefined, IsOptional } from 'class-validator';
 
 export class GetManyFolderInput {
   @IsDefined()
-  page: number;
+  page?: number;
 
   @IsDefined()
-  limit: number;
+  limit?: number;
 
   @IsDefined()
   user_id: string;
+
+  @IsOptional()
+  parent_id?: string;
 }
