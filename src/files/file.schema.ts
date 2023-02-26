@@ -17,11 +17,6 @@ export class File {
   name: string;
 
   @Prop({
-    required: true,
-  })
-  url: string;
-
-  @Prop({
     type: mongoose.Schema.Types.ObjectId,
     ref: Folder.name,
     required: false,

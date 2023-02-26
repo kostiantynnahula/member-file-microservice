@@ -1,4 +1,4 @@
-import { IsDefined, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Folder } from './../../folders/folder.schema';
 
 export class CreateFileInput {

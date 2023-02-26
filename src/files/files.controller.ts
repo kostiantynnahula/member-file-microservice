@@ -47,10 +47,11 @@ export class FilesController {
 
   @MessagePattern({
     entity: 'files',
-    cmd: 'create-one',
+    cmd: 'delete-one',
   })
   async deleteOne(@Payload() payload: DeleteOneFileInput) {
     const { _id, user_id } = payload;
-    return await this.service.deleteOne(_id, user_id);
+    await this.service.deleteOne(_id, user_id);
+    return { _id };
   }
 }

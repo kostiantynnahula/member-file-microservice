@@ -40,13 +40,13 @@ export class FilesService {
     user_id: string,
     data: Omit<UpdateFileInput, '_id' | 'user_id'>,
   ): Promise<File> {
-    return this.fileModel.findByIdAndUpdate(
-      { id: _id, user_id: user_id },
+    return await this.fileModel.findByIdAndUpdate(
+      { _id: _id, user_id: user_id },
       { ...data },
-    ) as unknown as File;
+    );
   }
 
   async deleteOne(_id: string, user_id: string): Promise<void> {
-    this.fileModel.findByIdAndDelete({ id: _id, user_id });
+    await this.fileModel.findByIdAndDelete({ _id: _id, user_id: user_id });
   }
 }
