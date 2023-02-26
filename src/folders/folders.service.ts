@@ -26,6 +26,11 @@ export class FoldersService {
       .exec() as unknown as Folder;
   }
 
+  async getList(user_id: string): Promise<Folder[]> {
+    const list = await this.folderModel.find({ user_id: user_id }).exec();
+    return list as unknown as Folder[];
+  }
+
   async getMany(params: GetManyFolderInput): Promise<Folder[]> {
     const { page = 1, limit = 100, user_id, parent_id } = params;
     const res = this.folderModel
