@@ -26,11 +26,9 @@ export class FilesService {
   }
 
   async getMany(params: GetManyFilesInput): Promise<File[]> {
-    const { limit, page, user_id } = params;
+    const { user_id, folder_id } = params;
     const res = this.fileModel
-      .find({ user_id: user_id })
-      .limit(limit)
-      .skip((page - 1) * limit)
+      .find({ user_id: user_id, folder_id: folder_id })
       .exec();
     return res as unknown as File[];
   }
