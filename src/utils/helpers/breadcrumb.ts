@@ -4,7 +4,7 @@ export const buildBreadcrumbTree = (
   list: Folder[],
   folder: Folder,
 ): Folder[] => {
-  if (folder?.parent_id) {
+  if (folder?.folder_id) {
     return getParents(list, folder);
   }
   return [];
@@ -14,10 +14,10 @@ export const getParents = (list: Folder[], folder: Folder): Folder[] => {
   const result = [];
 
   const parent = list.find(
-    (item) => item._id.toString() === folder.parent_id.toString(),
+    (item) => item._id.toString() === folder.folder_id.toString(),
   );
 
-  if (parent.parent_id) {
+  if (parent.folder_id) {
     result.push(parent);
     const parents = getParents(list, parent);
     return parents.concat(result);

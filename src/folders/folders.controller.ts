@@ -51,6 +51,7 @@ export class FoldersController {
     cmd: 'get-many',
   })
   async getMany(@Payload() payload: GetManyFolderInput) {
+    console.log(payload, 'payload');
     return await this.foldersService.getMany(payload);
   }
 

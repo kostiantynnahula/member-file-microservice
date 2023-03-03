@@ -5,5 +5,5 @@ export class GetManyFolderInput {
   user_id: string;
 
   @IsOptional()
-  parent_id?: string;
+  folder_id?: string;
 }

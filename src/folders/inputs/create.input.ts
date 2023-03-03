@@ -11,5 +11,5 @@ export class CreateFolderInput {
 
   @IsOptional()
   @IsNotEmpty()
-  parent_id?: string;
+  folder_id?: string;
 }

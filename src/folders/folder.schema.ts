@@ -24,7 +24,7 @@ export class Folder {
     ref: Folder.name,
     required: false,
   })
-  parent_id: string;
+  folder_id: string;
 
   @Prop({
     required: true,

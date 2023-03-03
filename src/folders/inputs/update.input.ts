@@ -11,8 +11,4 @@ export class UpdateFolderInput {
   @IsOptional()
   @IsNotEmpty()
   user_id: string;
-
-  @IsOptional()
-  @IsNotEmpty()
-  parent_id?: string;
 }
