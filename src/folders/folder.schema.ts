@@ -1,7 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Transform } from 'class-transformer';
-import mongoose, { HydratedDocument } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { File } from './../files/file.schema';
+
+export class ParentFolder {
+  _id: string;
+  name: string;
+  closest?: boolean;
+}
 
 @Schema({
   _id: true,
@@ -11,24 +17,20 @@ export class Folder {
   @Transform(({ value }) => value.toString())
   _id?: string;
 
-  @Prop({
-    required: true,
-  })
+  @Prop({ required: true })
   name: string;
 
   @Prop()
   files: File[];
 
   @Prop({
-    type: mongoose.Schema.Types.ObjectId,
-    ref: Folder.name,
-    required: false,
-  })
-  folder_id: string;
-
-  @Prop({
     required: true,
+    index: true,
+    type: 'object',
   })
+  parents: ParentFolder[] = [];
+
+  @Prop({ required: true })
   user_id: string;
 }
 

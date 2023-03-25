@@ -33,11 +33,24 @@ export class FoldersService {
 
   async getMany(params: GetManyFolderInput): Promise<Folder[]> {
     const { user_id, folder_id } = params;
-    const res = this.folderModel
-      .find({ user_id: user_id, folder_id: folder_id })
-      .exec();
+    if (folder_id) {
+      const res = this.folderModel
+        .find({
+          parents: { $elemMatch: { _id: folder_id, closest: true } },
+          user_id: user_id,
+        })
+        .exec();
 
-    return res as unknown as Folder[];
+      return res as unknown as Folder[];
+    } else {
+      const res = this.folderModel
+        .find({
+          parents: { $size: 0 },
+          user_id: user_id,
+        })
+        .exec();
+      return res as unknown as Folder[];
+    }
   }
 
   async updateOne(
@@ -45,10 +58,45 @@ export class FoldersService {
     user_id: string,
     data: Omit<UpdateFolderInput, '_id' | 'user_id'>,
   ): Promise<Folder> {
-    return (await this.folderModel.findByIdAndUpdate(
+    const session = await this.folderModel.startSession();
+
+    await session.startTransaction();
+
+    const result = await this.folderModel.findByIdAndUpdate(
       { _id: _id, user_id: user_id },
       { ...data },
-    )) as unknown as Folder;
+    );
+
+    if (data.name) {
+      await this.updateChildFolders(_id, data.name, user_id);
+    }
+
+    session.endSession();
+
+    return result as unknown as Folder;
+  }
+
+  async updateChildFolders(
+    parent_id: string,
+    newName: string,
+    user_id: string,
+  ): Promise<void> {
+    await this.folderModel.updateMany(
+      {
+        parents: { $elemMatch: { _id: parent_id } },
+        user_id: user_id,
+      },
+      {
+        $set: { 'parents.$[i].name': newName },
+      },
+      {
+        arrayFilters: [
+          {
+            'i._id': parent_id,
+          },
+        ],
+      },
+    );
   }
 
   async deleteOne(params: DeleteOneFolderInput): Promise<void> {

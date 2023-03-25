@@ -6,7 +6,6 @@ import { UpdateFolderInput } from './inputs/update.input';
 import { GetManyFolderInput } from './inputs/get-many.input';
 import { DeleteOneFolderInput } from './inputs/delete-one.input';
 import { GetOneFolderInput } from './inputs/get-one.input';
-import { buildBreadcrumbTree } from './../utils/helpers/breadcrumb';
 
 @Controller('folders')
 export class FoldersController {
@@ -32,27 +31,21 @@ export class FoldersController {
 
   @MessagePattern({
     entity: 'folder',
-    cmd: 'get-breadcrumb',
-  })
-  async getBreadcrumb(@Payload() payload: GetOneFolderInput) {
-    const { _id, user_id } = payload;
-
-    const folder = await this.foldersService.getOne(_id, user_id);
-
-    const folders = await this.foldersService.getList(user_id);
-
-    const breadcrumb = buildBreadcrumbTree(folders, folder);
-
-    return breadcrumb;
-  }
-
-  @MessagePattern({
-    entity: 'folder',
     cmd: 'get-many',
   })
   async getMany(@Payload() payload: GetManyFolderInput) {
-    console.log(payload, 'payload');
-    return await this.foldersService.getMany(payload);
+    const list = await this.foldersService.getMany(payload);
+
+    if (payload.folder_id) {
+      const { parents } = await this.foldersService.getOne(
+        payload.folder_id,
+        payload.user_id,
+      );
+
+      return { list, parents };
+    }
+
+    return { list, parents: [] };
   }
 
   @MessagePattern({

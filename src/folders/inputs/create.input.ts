@@ -1,4 +1,5 @@
-import { IsDefined, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsDefined, IsNotEmpty } from 'class-validator';
+import { ParentFolder } from './../folder.schema';
 
 export class CreateFolderInput {
   @IsDefined()
@@ -9,7 +10,6 @@ export class CreateFolderInput {
   @IsNotEmpty()
   user_id: string;
 
-  @IsOptional()
-  @IsNotEmpty()
-  folder_id?: string;
+  @IsDefined()
+  parents: ParentFolder[];
 }

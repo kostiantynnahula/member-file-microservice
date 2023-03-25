@@ -1,4 +1,5 @@
 import { IsDefined, IsNotEmpty, IsOptional } from 'class-validator';
+import { ParentFolder } from './../folder.schema';
 
 export class UpdateFolderInput {
   @IsDefined()
@@ -11,4 +12,7 @@ export class UpdateFolderInput {
   @IsOptional()
   @IsNotEmpty()
   user_id: string;
+
+  @IsDefined()
+  parents: ParentFolder[];
 }
