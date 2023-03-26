@@ -99,8 +99,17 @@ export class FoldersService {
     );
   }
 
+  async deleteChilds(parent_id: string): Promise<void> {
+    await this.folderModel.deleteMany({
+      parents: { $elemMatch: { _id: parent_id } },
+    });
+  }
+
   async deleteOne(params: DeleteOneFolderInput): Promise<void> {
     const { _id, user_id } = params;
-    await this.folderModel.findByIdAndDelete({ _id: _id, user_id: user_id });
+    const session = await this.folderModel.startSession();
+    await this.folderModel.findByIdAndDelete({ _id: _id, user_id: user_id }); // delete folder
+    await this.deleteChilds(_id); // delete childs
+    session.endSession();
   }
 }
