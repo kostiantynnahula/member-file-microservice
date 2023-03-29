@@ -99,17 +99,26 @@ export class FoldersService {
     );
   }
 
-  async deleteChilds(parent_id: string): Promise<void> {
+  async deleteChilds(parent_id: string): Promise<string[]> {
+    const childs = (await this.folderModel
+      .find({
+        parents: { $elemMatch: { _id: parent_id } },
+      })
+      .exec()) as unknown as Folder[];
+
     await this.folderModel.deleteMany({
       parents: { $elemMatch: { _id: parent_id } },
     });
+
+    return childs.map((item) => item._id);
   }
 
-  async deleteOne(params: DeleteOneFolderInput): Promise<void> {
+  async deleteOne(params: DeleteOneFolderInput): Promise<string[]> {
     const { _id, user_id } = params;
     const session = await this.folderModel.startSession();
-    await this.folderModel.findByIdAndDelete({ _id: _id, user_id: user_id }); // delete folder
-    await this.deleteChilds(_id); // delete childs
+    await this.folderModel.findByIdAndDelete({ _id: _id, user_id: user_id });
+    const childIds = await this.deleteChilds(_id); // delete childs
     session.endSession();
+    return [_id, ...childIds];
   }
 }

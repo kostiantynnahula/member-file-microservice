@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { FoldersService } from './folders.service';
+import { FilesService } from './../files/files.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateFolderInput } from './inputs/create.input';
 import { UpdateFolderInput } from './inputs/update.input';
@@ -9,7 +10,10 @@ import { GetOneFolderInput } from './inputs/get-one.input';
 
 @Controller('folders')
 export class FoldersController {
-  constructor(private readonly foldersService: FoldersService) {}
+  constructor(
+    private readonly foldersService: FoldersService,
+    private readonly filesService: FilesService,
+  ) {}
 
   @MessagePattern({
     entity: 'folder',
@@ -62,7 +66,8 @@ export class FoldersController {
     cmd: 'delete-one',
   })
   async deleteOne(@Payload() payload: DeleteOneFolderInput) {
-    await this.foldersService.deleteOne(payload);
+    const ids = await this.foldersService.deleteOne(payload);
+    await this.filesService.deleteByFolderIds(ids);
     return true;
   }
 }

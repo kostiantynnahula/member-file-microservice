@@ -3,6 +3,7 @@ import { FoldersService } from './folders.service';
 import { FoldersController } from './folders.controller';
 import { FolderSchema, Folder } from './folder.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { FilesModule } from './../files/files.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         schema: FolderSchema,
       },
     ]),
+    FilesModule,
   ],
   providers: [FoldersService],
   controllers: [FoldersController],
