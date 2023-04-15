@@ -21,4 +21,8 @@ export class CreateFileInput {
   @IsDefined()
   @IsNotEmpty()
   key: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  mimetype: string;
 }

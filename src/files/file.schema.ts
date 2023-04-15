@@ -37,6 +37,11 @@ export class File {
     required: true,
   })
   key: string;
+
+  @Prop({
+    required: true,
+  })
+  mimetype: string;
 }
 
 export type FileDocument = HydratedDocument<SchemaFactory>;
