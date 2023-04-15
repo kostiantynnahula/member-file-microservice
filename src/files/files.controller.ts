@@ -6,10 +6,14 @@ import { UpdateFileInput } from './inputs/update.input';
 import { GetManyFilesInput } from './inputs/get-many.input';
 import { GetOneFileInput } from './inputs/get-one.input';
 import { DeleteOneFileInput } from './inputs/delete-one.input';
+import { S3FileService } from './../utils/services/S3File.service';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly service: FilesService) {}
+  constructor(
+    private readonly service: FilesService,
+    private readonly s3FileService: S3FileService,
+  ) {}
 
   @MessagePattern({
     entity: 'files',
@@ -51,7 +55,11 @@ export class FilesController {
   })
   async deleteOne(@Payload() payload: DeleteOneFileInput) {
     const { _id, user_id } = payload;
-    await this.service.deleteOne(_id, user_id);
+    const file = await this.service.getOne(_id, user_id);
+    if (file) {
+      await this.service.deleteOne(_id, user_id);
+      await this.s3FileService.deleteFile(file.key);
+    }
     return { _id };
   }
 }

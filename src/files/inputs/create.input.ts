@@ -13,4 +13,12 @@ export class CreateFileInput {
   @IsDefined()
   @IsNotEmpty()
   user_id: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  location: string;
+
+  @IsDefined()
+  @IsNotEmpty()
+  key: string;
 }

@@ -48,10 +48,18 @@ export class FilesService {
     await this.fileModel.findByIdAndDelete({ _id: _id, user_id: user_id });
   }
 
-  async deleteByFolderIds(ids: string[]) {
-    const result = await this.fileModel.deleteMany({
+  async deleteByFolderIds(ids: string[]): Promise<void> {
+    await this.fileModel.deleteMany({
       folder_id: { $in: ids },
     });
-    console.log(result);
+  }
+
+  async getFilesByFolderIds(ids: string[]): Promise<File[]> {
+    const files = (await this.fileModel
+      .find({
+        folder_id: { $in: ids },
+      })
+      .exec()) as unknown as File[];
+    return files;
   }
 }

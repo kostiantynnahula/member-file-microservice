@@ -3,6 +3,7 @@ import { FilesService } from './files.service';
 import { FilesController } from './files.controller';
 import { FileSchema, File } from './file.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { S3FileService } from './../utils/services/S3File.service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
     ]),
   ],
-  providers: [FilesService],
+  providers: [FilesService, S3FileService],
   controllers: [FilesController],
   exports: [FilesService],
 })

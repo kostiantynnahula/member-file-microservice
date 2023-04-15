@@ -27,6 +27,16 @@ export class File {
     required: true,
   })
   user_id: string;
+
+  @Prop({
+    required: true,
+  })
+  location: string;
+
+  @Prop({
+    required: true,
+  })
+  key: string;
 }
 
 export type FileDocument = HydratedDocument<SchemaFactory>;

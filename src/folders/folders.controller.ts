@@ -7,12 +7,14 @@ import { UpdateFolderInput } from './inputs/update.input';
 import { GetManyFolderInput } from './inputs/get-many.input';
 import { DeleteOneFolderInput } from './inputs/delete-one.input';
 import { GetOneFolderInput } from './inputs/get-one.input';
+import { S3FileService } from './../utils/services/S3File.service';
 
 @Controller('folders')
 export class FoldersController {
   constructor(
     private readonly foldersService: FoldersService,
     private readonly filesService: FilesService,
+    private readonly s3FileService: S3FileService,
   ) {}
 
   @MessagePattern({
@@ -67,7 +69,12 @@ export class FoldersController {
   })
   async deleteOne(@Payload() payload: DeleteOneFolderInput) {
     const ids = await this.foldersService.deleteOne(payload);
+    const files = await this.filesService.getFilesByFolderIds(ids);
     await this.filesService.deleteByFolderIds(ids);
+    if (files) {
+      const fileKeys = files.map((file) => file.key);
+      await this.s3FileService.deleteFiles(fileKeys);
+    }
     return true;
   }
 }
